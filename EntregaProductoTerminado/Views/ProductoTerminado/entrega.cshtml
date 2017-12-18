@@ -1,0 +1,212 @@
+﻿@model EntregaProductoTerminado.ViewModels.OrdenDeProduccionViewModel
+@{
+    ViewBag.Title = "Entrega";
+}
+
+<h2>Ingreso de Material a Bodega</h2>
+
+@using (Html.BeginForm("Entrega", "ProductoTerminado", FormMethod.Get))
+{
+<div class="form-inline">
+    <label for="opnumber" id="title">Orden de Producción</label>
+    <input autocomplete="on" id="opnumber" class="form-control" type="text" name="opnumber" placeholder="# de OP" />
+    <input class="btn btn-primary" type="submit" value="Buscar" />
+</div>
+}
+<p>@Html.DisplayFor(model => model.transactionMessage)</p>
+<hr />
+@using (Html.BeginForm("Entrega", "ProductoTerminado", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.AntiForgeryToken()
+    <ul class="result">
+        <li class="border-colored">
+            <span>@Html.DisplayNameFor(model => model.ordenDeProduccion.NumeroOrdenProduccion) : </span>
+            @Html.DisplayFor(model => model.ordenDeProduccion.NumeroOrdenProduccion)
+        </li>
+        @Html.HiddenFor(model => model.ordenDeProduccion.NumeroOrdenProduccion)
+
+        <li class="border-colored">
+            <span>@Html.DisplayNameFor(model => model.ordenDeProduccion.Cliente) : </span>
+            @Html.DisplayFor(model => model.ordenDeProduccion.Cliente)
+        </li>
+        @Html.HiddenFor(model => model.ordenDeProduccion.Cliente)
+
+        <li class="border-colored">
+            <span>@Html.DisplayNameFor(model => model.ordenDeProduccion.OrdenDeCompra) : </span>
+            @Html.DisplayFor(model => model.ordenDeProduccion.OrdenDeCompra)
+        </li>
+        @Html.HiddenFor(model => model.ordenDeProduccion.OrdenDeCompra)
+
+        <li class="border-colored">
+            <span>@Html.DisplayNameFor(model => model.ordenDeProduccion.CodProductoInterno) : </span>
+            @Html.DisplayFor(model => model.ordenDeProduccion.CodProductoInterno)
+        </li>
+        @Html.HiddenFor(model => model.ordenDeProduccion.CodProductoInterno)
+
+        <li class="border-colored">
+            <span>@Html.DisplayNameFor(model => model.ordenDeProduccion.PorcentajeTolerancia) : </span>
+            @Html.DisplayFor(model => model.ordenDeProduccion.PorcentajeTolerancia)
+        </li>
+        @Html.HiddenFor(model => model.ordenDeProduccion.PorcentajeTolerancia)
+
+        <li class="border-colored">
+            <span>@Html.DisplayNameFor(model => model.ordenDeProduccion.Excedente) : </span>
+            @Html.DisplayFor(model => model.ordenDeProduccion.Excedente)
+        </li>
+        @Html.HiddenFor(model => model.ordenDeProduccion.Excedente)
+
+        <li class="border-colored">
+            <span>@Html.DisplayNameFor(model => model.ordenDeProduccion.MaximoAceptadoPorCliente) : </span>
+            @Html.DisplayFor(model => model.ordenDeProduccion.MaximoAceptadoPorCliente)
+        </li>
+        @Html.HiddenFor(model => model.ordenDeProduccion.MaximoAceptadoPorCliente)
+
+        <li class="border-colored">
+            <span>@Html.DisplayNameFor(model => model.ordenDeProduccion.TotalEnSistema) : </span>
+            @Html.DisplayFor(model => model.ordenDeProduccion.TotalEnSistema)
+        </li>
+        @Html.HiddenFor(model => model.ordenDeProduccion.TotalEnSistema)
+    </ul>
+    <fieldset>
+        <div class="form-group">
+            <div class="col col-md-4">
+                <label for="ordenDeProduccion_Bultos">@Html.DisplayNameFor(model => model.ordenDeProduccion.Bultos)
+                (@Html.DisplayFor(model => model.ordenDeProduccion.Bultos))</label> <!--User Input-->
+                @Html.TextBoxFor(model => model.ordenDeProduccion.Bultos, new { @class = "form-control", @autocomplete = "off" })
+                @Html.ValidationMessageFor(model => model.ordenDeProduccion.Bultos, "",new { @class = "text-danger" })
+            </div>
+            <div class="col col-md-4">
+                <label for="ordenDeProduccion_UnidadesPorBulto">@Html.DisplayNameFor(model => model.ordenDeProduccion.UnidadesPorBulto) 
+                (@Html.DisplayFor(model => model.ordenDeProduccion.UnidadesPorBulto))</label> <!--User Input-->
+                @Html.TextBoxFor(model => model.ordenDeProduccion.UnidadesPorBulto, new { @class = "form-control", @autocomplete = "off" })
+                @Html.ValidationMessageFor(model => model.ordenDeProduccion.UnidadesPorBulto, "", new { @class = "text-danger" })
+            </div>
+            <div class="col col-md-4">
+                <label for="orderDeProduccion_Fraccion">@Html.DisplayNameFor(model => model.ordenDeProduccion.Fraccion) 
+                (@Html.DisplayFor(model => model.ordenDeProduccion.Fraccion))</label> <!--User Input-->
+                @Html.TextBoxFor(model => model.ordenDeProduccion.Fraccion, new { @class = "form-control", @autocomplete = "off" })
+                @Html.ValidationMessageFor(model => model.ordenDeProduccion.Fraccion, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div>
+            <label for="orderDeProduccion_TotalCalculado">@Html.DisplayNameFor(model => model.ordenDeProduccion.TotalCalculado)
+                (@Html.DisplayFor(model => model.ordenDeProduccion.TotalCalculado))</label> <!--This value is calculate-->
+            @Html.TextBoxFor(model => model.ordenDeProduccion.TotalCalculado, new { @class = "form-control", @readonly = "readonly", @Value = "0" })
+            @Html.HiddenFor(model => model.ordenDeProduccion.TotalCalculado, new { @id="totalCalculado_Hidden" })
+        </div>
+        <div class="form-group">
+            <div class="col col-lg-6">
+                <button id="big-blue-button" type="button" data-toggle="modal"
+                        data-target="#request-modal" onclick="IfSend()">
+                    Ingresar a Bodega
+                </button>
+            </div>
+        </div>
+
+        <div class="modal fade" id="request-modal" tabindex="-1" role="alertdialog" aria-labelledby="request-modal-label">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button id="close-button" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="request-modal-label">¿Desea guardar la entrada?</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p id="SubmitMessage">
+                            <!--Acá mostrar el mensaje de guardado o si se pasa de valor-->
+                            <!--revisar con JS-->
+                            El proceso de guardado enviará un correo a los responsables de producto terminado, además
+                            de guardar la información del lote.
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="cancel-button" type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                        <button id="save_button" type="submit" class="btn btn-danger" data-loading-text="Guardando..."
+                                autocomplete="off">
+                            Guardar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+}
+
+<br />
+
+@section Scripts{
+ @Scripts.Render("~/bundles/jqueryval")
+ <script type="text/javascript">
+     //Pasar El JS y JQuery a otro archivo aparte
+     $(document).ready(function () {
+         $('#ordenDeProduccion_Bultos').val(0);
+         $('#ordenDeProduccion_UnidadesPorBulto').val(0);
+         $('#ordenDeProduccion_Fraccion').val(0);
+
+         $('#save-button').on('click', function () {
+             var $btn = $(this).button('loading');
+             $('#cancel-button').attr('disabled', '');
+             $('#close-button').attr('disabled', '');
+         });
+         $('#ordenDeProduccion_Bultos').on('input', function () {
+             var valueBultos = $('#ordenDeProduccion_Bultos').val();
+             var valueUnidades = $('#ordenDeProduccion_UnidadesPorBulto').val();
+             var valueFraccion = $('#ordenDeProduccion_Fraccion').val();
+             if (valueBultos != null && valueUnidades != null && valueFraccion != null) {
+                 var multip = (valueBultos * valueUnidades) + parseInt(valueFraccion);
+                 $('#ordenDeProduccion_TotalCalculado').attr('Value', multip.toString());
+                 $('#ordenDeProduccion_TotalCalculado').text(multip.toString());
+             }
+         });
+         $('#ordenDeProduccion_UnidadesPorBulto').on('input', function () {
+             var valueBultos = $('#ordenDeProduccion_Bultos').val();
+             var valueUnidades = $('#ordenDeProduccion_UnidadesPorBulto').val();
+             var valueFraccion = $('#ordenDeProduccion_Fraccion').val();
+             if (valueBultos != null && valueUnidades != null && valueFraccion != null) {
+                 var multip = (valueBultos * valueUnidades) + parseInt(valueFraccion);
+                 $('#ordenDeProduccion_TotalCalculado').attr('Value', multip.toString());
+                 $('#ordenDeProduccion_TotalCalculado').text(multip.toString());
+             }
+         });
+         $('#ordenDeProduccion_Fraccion').on('input', function () {
+             var valueBultos = $('#ordenDeProduccion_Bultos').val();
+             var valueUnidades = $('#ordenDeProduccion_UnidadesPorBulto').val();
+             var valueFraccion = $('#ordenDeProduccion_Fraccion').val();
+             if (valueBultos != null && valueUnidades != null && valueFraccion != null) {
+                 var multip = (valueBultos * valueUnidades) + parseInt(valueFraccion);
+                 $('#ordenDeProduccion_TotalCalculado').attr('Value', multip.toString());
+                 $('#ordenDeProduccion_TotalCalculado').text(multip.toString());
+             }
+         });
+     });
+     function IfSend() {
+         var valueBultos = $('#ordenDeProduccion_Bultos').val();
+         var valueUnidades = $('#ordenDeProduccion_UnidadesPorBulto').val();
+         var valueFraccion = $('#ordenDeProduccion_Fraccion').val();
+         if (valueBultos != null && valueUnidades != null && valueFraccion != null) {
+             var totalCalculadoAnteriormente = $('#totalCalculado_Hidden').val();
+             var multip = (valueBultos * valueUnidades) + parseInt(valueFraccion) + parseInt(totalCalculadoAnteriormente);
+             var totalEnSistema = $('#ordenDeProduccion_TotalEnSistema').val();
+             if (multip > totalEnSistema) {
+                 //$('#save_button').prop('disabled', true);
+                 $('#SubmitMessage').text("El valor ingresado presenta un excedente. Máximo: " +
+                     totalEnSistema + " ingresado: " + multip + ". Excedente de : " + (multip - totalEnSistema) + "¿desea continuar?");
+             } else if (multip == totalEnSistema) {
+                 //$('#save_button').prop('disabled', false);
+                 $('#SubmitMessage').text("El proceso de guardado enviará un correo a los responsables de producto terminado, además "+
+                            "de guardar la información del lote ¿desea continuar?");
+             } else {
+                 //$('#save_button').prop('disabled', false);
+                 $('#SubmitMessage').text("Se hará ingreso de los valores a producto terminado ¿desea continuar?");
+             }
+         }
+     }
+ </script>
+}
+
+
+
+
+
+

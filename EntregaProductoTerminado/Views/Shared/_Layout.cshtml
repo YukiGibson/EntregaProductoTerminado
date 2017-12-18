@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Ingreso a Producto Terminado</title>
+    <meta name="description" content="Web Page for PT" />
+    <meta http-equiv="author" content="Laureano Gabriel Sánchez Aguilar">
+    <link rel="shortcut icon" type="image/x-icon" href="~/favicon.ico" />
+    <link rel="icon" type="image/icon" href="~/favicon.ico" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+</head>
+<body>
+    <div class="header-nav">
+        <div class="nav-list">
+            <ul>
+                <li><a class="nav-link" href="http://intranet/gv/DefaultPage.aspx">Regresar</a></li>
+                <li>@Html.ActionLink("Ingresos", "entrega", "ProductoTerminado", null, new { @class = "nav-link" })</li>
+                <li>@Html.ActionLink("Historial", "historial", "ProductoTerminado", null, new { @class= "nav-link" })</li>
+            </ul>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer class="modal-footer">
+            <div class="text-center">
+                <p>@DateTime.Now.Year - Grupo Vargas S.A.</p>
+                <p><em>Versión 1.0</em></p>
+            </div>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
