@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using EntregaProductoTerminado.Models;
 using EntregaProductoTerminado.DAL;
+using System.Data.SqlClient;
 
 namespace EntregaProductoTerminado.Repositories
 {
-    public class MetricsRepository : IRepository<View_USR_M3_OrdAtividades>, IDisposable
+    public class MetricsRepository : IRepository<OrdenDeProduccion>, IDisposable
     {
         private MetricsContext _metricsContext;
 
@@ -16,27 +15,60 @@ namespace EntregaProductoTerminado.Repositories
             _metricsContext = new MetricsContext();
         }
 
-        public IQueryable<View_USR_M3_OrdAtividades> Entity()
+        public IQueryable<OrdenDeProduccion> GetEntity()
         {
             throw new NotImplementedException();
         }
 
-        public void Add(View_USR_M3_OrdAtividades entity)
+        public void Add(OrdenDeProduccion entity)
         {
             throw new NotImplementedException();
         }
 
-        public void Delete(View_USR_M3_OrdAtividades entity)
+        public void Delete(OrdenDeProduccion entity)
         {
             throw new NotImplementedException();
         }
 
-        public View_USR_M3_OrdAtividades GetByOp(int? OP)
+        /// <summary>
+        /// Obtiene una OP por propiedad de OP
+        /// </summary>
+        /// <param name="OP">Numero de la orden de produccion</param>
+        /// <returns></returns>
+        public OrdenDeProduccion GetByOp(string OP)
         {
-            string OrdenP = OP.ToString();
-            var ordAtividades = _metricsContext.View_USR_M3_OrdAtividades.Where(p => p.NumOrdem.Equals(OrdenP))
-                .FirstOrDefault();
-            return ordAtividades;
+            DiboRepository dibo = new DiboRepository();
+            if (_metricsContext.A_Vista_OConversion_Reserva.Where(p => p.NumOrdem
+            .Equals(OP.Trim())).Any())
+            {
+                SqlParameter OrdenDeProduccion = new SqlParameter("@OrdenDeProduccion",
+                    OP.Trim());
+                OrdenDeProduccion produccion = _metricsContext.Database.SqlQuery<OrdenDeProduccion>
+               ("PTSearchByOP @OrdenDeProduccion", OrdenDeProduccion).FirstOrDefault();
+
+                var diboQuery = dibo.GetDibo.OrdenDeProduccion.Where(p => p.NumeroOrdenProduccion.ToString()
+                .Equals(OP)).GroupBy(o => new
+                {
+                    o.NumeroOrdenProduccion
+                }).Select(i => new {
+                    Bultos = i.Sum(g => g.Bultos),
+                    TotalCalculado = i.Sum(g => g.TotalCalculado),
+                    Excedente = i.Sum(g => g.Excedente),
+                    Fraccion = i.Sum(g => g.Fraccion)
+                    }).SingleOrDefault();
+
+                if (diboQuery != null)
+                {
+                    produccion.Bultos = diboQuery.Bultos;
+                    produccion.Fraccion = diboQuery.Fraccion;
+                    produccion.TotalCalculado = diboQuery.TotalCalculado;
+                    produccion.Excedente = diboQuery.Excedente;
+                }
+                dibo.Dispose();
+                return produccion;
+            }
+            dibo.Dispose();
+            return null;
         }
 
         public void Save()
@@ -44,7 +76,7 @@ namespace EntregaProductoTerminado.Repositories
             throw new NotImplementedException();
         }
 
-        public string Update(View_USR_M3_OrdAtividades entity, int? OP)
+        public void Update(OrdenDeProduccion entity)
         {
             throw new NotImplementedException();
         }

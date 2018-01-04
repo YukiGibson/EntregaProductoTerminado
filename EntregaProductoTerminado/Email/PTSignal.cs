@@ -22,6 +22,7 @@ namespace EntregaProductoTerminado.Email
         }
         public StringBuilder BuildMessage(OrdenDeProduccion orden)
         {
+            //TODO Agregar el codigo interno y la descripcion del producto
             StringBuilder builder = new StringBuilder();
             builder.Append("<h2>Se hizo un ingreso a producto terminado</h2> " +
             "<p>Detalles abajo: </p> " +
@@ -29,6 +30,7 @@ namespace EntregaProductoTerminado.Email
                 "<thead style=\"background-color: #a6fcf4\"> " +
                 "<tr style=\"border-bottom: 1px solid #222222\"> " +
                     "<th style=\"padding-right:10px; border-right: 1px solid #000000\">OP</th> " +
+                    "<th style=\"padding-right:10px; border-right: 1px solid #000000\">Fecha de Empaque</th> " +
                     "<th style=\"padding-right:10px; border-right: 1px solid #000000\">Cliente</th> " +
                     "<th style=\"padding-right:10px; border-right: 1px solid #000000\">Bultos</th> " +
                     "<th style=\"padding-right:10px; border-right: 1px solid #000000\">Unidades por bulto</th> " +
@@ -38,12 +40,13 @@ namespace EntregaProductoTerminado.Email
                 "</tr></thead><tbody style=\"background-color: #ffffff\"><tr>");
             builder.Append(String.Format("<td style=\"padding: 5px\">{0}</td> " +
                 "<td style=\"padding:5px\">{1}</td> " +
-                "<td style=\"padding:5px\">{2:n}</td> " +
+                "<td style=\"padding:5px\">{2}</td> " +
                 "<td style=\"padding:5px\">{3:n}</td> " +
                 "<td style=\"padding:5px\">{4:n}</td> " +
                 "<td style=\"padding:5px\">{5:n}</td> " +
-                "<td style=\"padding:5px\">{6:n}</td> ", orden.NumeroOrdenProduccion, orden.Cliente, orden.Bultos,
-                orden.UnidadesPorBulto, orden.Fraccion, orden.TotalCalculado, orden.Excedente));
+                "<td style=\"padding:5px\">{6:n}</td> " +
+                "<td style=\"padding:5px\">{7:n}</td> ", orden.NumeroOrdenProduccion, orden.FechaIngreso, orden.Cliente, 
+                orden.Bultos, orden.UnidadesPorBulto, orden.Fraccion, orden.TotalCalculado, orden.Excedente));
             builder.Append("</tr></tbody></table><br/> " +
         "Nota: <i>Este correo fue generado automáticamente, si presenta errores favor contactar a los administradores de la aplicación</i> ");
             return builder;

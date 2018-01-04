@@ -78,3 +78,46 @@ li {
     .nav-link:hover {
         color: #1ae299;
     }
+
+#list-end{
+    text-align:center;
+}
+
+table{
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td{
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+th {
+    text-align: center;
+    text-transform: capitalize;
+    border-bottom: 2px solid rgb(88, 150, 208);
+    border-top: 2px solid rgb(88, 150, 208);
+    font-style: normal;
+}
+
+td {
+    border: 1px solid #000000;
+    text-align: center;
+}
+
+tfoot {
+    background-color: #86a9d4;
+    background-color: rgb(134, 169, 212);
+    font-style: oblique;
+    letter-spacing: 0.2em;
+}
+
+.row-highlight:hover  {
+    background-color: #9299b0;
+    background-color: rgb(146, 153, 176);
+    color: white;
+    color: #ffffff;
+    color: rgb(255, 255 ,255);
+    cursor: pointer;
+}

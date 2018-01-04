@@ -14,6 +14,9 @@ namespace EntregaProductoTerminado.DAL
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<OrdenDeProduccion>()
+                    .Property(e => e.NumeroOrdenProduccion)
+                    .IsUnicode(false);
         }
     }
 }

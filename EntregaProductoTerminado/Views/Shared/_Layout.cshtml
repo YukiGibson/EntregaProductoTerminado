@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8" lang="es-es" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Ingreso a Producto Terminado</title>
     <meta name="description" content="Web Page for PT" />
@@ -28,13 +28,17 @@
         <footer class="modal-footer">
             <div class="text-center">
                 <p>@DateTime.Now.Year - Grupo Vargas S.A.</p>
-                <p><em>Versión 1.0</em></p>
+                <p><em>Versión 2.0</em></p>
             </div>
         </footer>
     </div>
 
     @Scripts.Render("~/bundles/jquery")
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     @Scripts.Render("~/bundles/bootstrap")
+    <script type="text/javascript" src="~/Scripts/datepicker-es.js"></script>
+    <script type="text/javascript" src="~/Scripts/entrega.js"></script>
     @RenderSection("scripts", required: false)
 </body>
 </html>

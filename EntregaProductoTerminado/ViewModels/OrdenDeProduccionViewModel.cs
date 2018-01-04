@@ -13,6 +13,6 @@ namespace EntregaProductoTerminado.ViewModels
 
         public string transactionMessage { get; set; }
 
-
+        public List<OrdenDeProduccion> OPHistorial { get; set; }
     }
 }

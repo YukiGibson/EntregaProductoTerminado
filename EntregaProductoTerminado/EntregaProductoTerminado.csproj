@@ -197,27 +197,34 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\ProductoTerminadoController.cs" />
-    <Compile Include="DAL\DataContext.cs" />
+    <Compile Include="Migrations\201801021738361_Change.cs" />
+    <Compile Include="Migrations\201801021738361_Change.Designer.cs">
+      <DependentUpon>201801021738361_Change.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OrdenDeProduccion.cs" />
+    <Compile Include="Migrations\201801021653070_OPtoString.cs" />
+    <Compile Include="Migrations\201801021653070_OPtoString.Designer.cs">
+      <DependentUpon>201801021653070_OPtoString.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801021718278_OrdenProduccion.cs" />
+    <Compile Include="Migrations\201801021718278_OrdenProduccion.Designer.cs">
+      <DependentUpon>201801021718278_OrdenProduccion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\A_Vista_OConversion_Reserva.cs" />
     <Compile Include="DAL\DiboContext.cs" />
     <Compile Include="DAL\MetricsContext.cs" />
     <Compile Include="Email\IEmail.cs" />
     <Compile Include="Email\PTSignal.cs" />
     <Compile Include="Models\View_USR_M3_OrdAtividades.cs" />
-    <Compile Include="Models\OrdenDeProduccion.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="Models\INV1.cs" />
-    <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\OINV.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\DiboRepository.cs" />
     <Compile Include="Repositories\IRepository.cs" />
     <Compile Include="Repositories\MetricsRepository.cs" />
-    <Compile Include="Repositories\SapRepository.cs" />
-    <Compile Include="ViewModels\HistorialProductoTerminado.cs" />
+    <Compile Include="ViewModels\HistorialProductoTerminadoViewModel.cs" />
     <Compile Include="ViewModels\OrdenDeProduccionViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -242,9 +249,12 @@
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Credentials.config" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-3.2.1.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\datepicker-es.js" />
+    <Content Include="Scripts\entrega.js" />
     <Content Include="Scripts\jquery-3.2.1.js" />
     <Content Include="Scripts\jquery-3.2.1.min.js" />
     <Content Include="Scripts\jquery-3.2.1.slim.js" />
@@ -259,7 +269,9 @@
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -282,6 +294,20 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.2.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.2.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201801021653070_OPtoString.resx">
+      <DependentUpon>201801021653070_OPtoString.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801021718278_OrdenProduccion.resx">
+      <DependentUpon>201801021718278_OrdenProduccion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801021738361_Change.resx">
+      <DependentUpon>201801021738361_Change.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
