@@ -9,10 +9,13 @@ namespace EntregaProductoTerminado.Models
     [Table("OrdenDeProduccion")]
     public partial class OrdenDeProduccion
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int ID { get; set; }
+
+        public byte Entregas { get; set; }
+
+        [StringLength(13)]
         [Display(Name = "OP")]
-        public int NumeroOrdenProduccion { get; set; }
+        public string NumeroOrdenProduccion { get; set; }
 
         [Required]
         [StringLength(50)]
@@ -25,10 +28,10 @@ namespace EntregaProductoTerminado.Models
 
         [Required]
         [StringLength(20)]
-        [Display(Name = "Código Interno")]
+        [Display(Name = "Codigo Interno")]
         public string CodProductoInterno { get; set; }
 
-        [Required(ErrorMessage ="El campo bultos no puede ser vacio")]
+        [Required(ErrorMessage = "El campo bultos no puede ser vacio")]
         [Range(0, 200000, ErrorMessage = "El rango de los bultos debe ser entre 0 y 200000")]
         [RegularExpression(@"([0-9])\d*", ErrorMessage = "El valor en bultos no es numérico")]
         public int? Bultos { get; set; }
@@ -36,6 +39,7 @@ namespace EntregaProductoTerminado.Models
         [Required(ErrorMessage = "El campo unidades por bulto no puede ser vacio")]
         [Range(0, 200000, ErrorMessage = "El rango debe ser entre 0 y 200000")]
         [RegularExpression(@"([0-9])\d*", ErrorMessage = "El valor en unidades por bulto no es numérico")]
+        [Display(Name = "Unidades por Bulto")]
         public int? UnidadesPorBulto { get; set; }
 
         [RegularExpression(@"([0-9])\d*", ErrorMessage = "El valor de fracción no es numérico")]
@@ -46,17 +50,18 @@ namespace EntregaProductoTerminado.Models
         public int? TotalCalculado { get; set; }
 
         [Display(Name = "Total en Sistema")]
-        public double? TotalEnSistema { get; set; }
+        public int? TotalEnSistema { get; set; }
 
         [Display(Name = "Porcentaje de Tolerancia")]
         public short? PorcentajeTolerancia { get; set; }
 
+        [Display(Name = "Fecha Ingreso")]
         [Column(TypeName = "datetime2")]
         public DateTime? FechaIngreso { get; set; }
 
         public int? Excedente { get; set; }
 
         [Display(Name = "Máximo Aceptado")]
-        public double? MaximoAceptadoPorCliente { get; set; }
+        public int? MaximoAceptadoPorCliente { get; set; }
     }
 }

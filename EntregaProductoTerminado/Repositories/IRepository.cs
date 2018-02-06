@@ -8,12 +8,12 @@ namespace EntregaProductoTerminado.Repositories
 {
     interface IRepository<TEntity> where TEntity : class
     {
-        TEntity GetByOp(int? OP);
-        IQueryable<TEntity> Entity();
+        TEntity GetByOp(string OP);
+        IQueryable<TEntity> GetEntity();
         void Add(TEntity entity);
         void Delete(TEntity entity);
 
-        string Update(TEntity entity, int? OP);
+        void Update(TEntity entity);
         void Save();
     }
 }

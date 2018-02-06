@@ -27,6 +27,8 @@ namespace EntregaProductoTerminado
                       "~/Content/bootstrap.css",
                       "~/Content/site.css", 
                       "~/Content/content.css"));
+            bundles.Add(new ScriptBundle("~/bundles/entrega.js").Include(
+                      "~/Scripts/entrega.js"));
         }
     }
 }

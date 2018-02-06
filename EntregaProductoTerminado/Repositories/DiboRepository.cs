@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using EntregaProductoTerminado.Models;
 using EntregaProductoTerminado.DAL;
+using EntregaProductoTerminado.Models;
+using EntregaProductoTerminado.ViewModels;
 
 namespace EntregaProductoTerminado.Repositories
 {
@@ -18,7 +19,29 @@ namespace EntregaProductoTerminado.Repositories
 
         public DiboContext GetDibo { get { return _diboContext; } }
 
-        public IQueryable<OrdenDeProduccion> Entity()
+        public List<OrdenDeProduccion> OrdenList(HistorialProductoTerminadoViewModel historial)
+        {
+            List<OrdenDeProduccion> ordersByOP = new List<OrdenDeProduccion>();
+            ordersByOP = _diboContext.OrdenDeProduccion.Where(o => o.FechaIngreso >= historial.fechaInicio &&
+            o.FechaIngreso <= historial.fechaFin).ToList();
+            if (!String.IsNullOrEmpty(historial.historialInput))
+            {
+                ordersByOP = ordersByOP.Where(p =>
+                p.NumeroOrdenProduccion.ToLower().Contains(historial.historialInput.ToLower()) ||
+                p.Cliente.ToLower().Contains(historial.historialInput.ToLower())).ToList();
+            }
+            return ordersByOP;
+        }
+
+        public List<OrdenDeProduccion> Consult(string OP)
+        {
+            var ordersByOP = _diboContext.OrdenDeProduccion.Where(p =>
+            p.NumeroOrdenProduccion.Equals(OP) ||
+            p.Cliente.Equals(OP)).ToList();
+            return ordersByOP;
+        }
+
+        public IQueryable<OrdenDeProduccion> GetEntity()
         {
             return _diboContext.OrdenDeProduccion;
         }
@@ -33,35 +56,41 @@ namespace EntregaProductoTerminado.Repositories
             _diboContext.OrdenDeProduccion.Remove(entity);
         }
         //Read
-        public OrdenDeProduccion GetByOp(int? OP)
+        public OrdenDeProduccion GetByOp(string OP)
         {
-            var test = _diboContext.OrdenDeProduccion.Where(p => p.NumeroOrdenProduccion == OP).FirstOrDefault();
-            return test;
+            OrdenDeProduccion getOrden = _diboContext.OrdenDeProduccion.
+                Where(p => p.NumeroOrdenProduccion == OP).FirstOrDefault();
+            return getOrden;
         }
-        public bool Exists(int OP)
+        public bool Exists(string OP)
         {
-
             return _diboContext.OrdenDeProduccion.Any(p => p.NumeroOrdenProduccion == OP);
         }
-        public string Update(OrdenDeProduccion entity, int? OP)
+
+        /// <summary>
+        ///Ingresa una nueva linea de bultos tomando en cuenta la cantidad anterior
+        ///en conjunto con el excedente.
+        /// </summary>
+        /// <param name="entity"></param>
+        public void Update(OrdenDeProduccion entity)
         {
-            var lineToUpdate = _diboContext.OrdenDeProduccion.Where(o => o.NumeroOrdenProduccion == OP).FirstOrDefault();
-            int? sumResult = lineToUpdate.TotalCalculado + entity.TotalCalculado;
-            lineToUpdate.Bultos += entity.Bultos;
-            lineToUpdate.UnidadesPorBulto = entity.UnidadesPorBulto;
-            lineToUpdate.Fraccion += entity.Fraccion;
-            if (sumResult > lineToUpdate.TotalEnSistema)
+            int? sumaDeIngresos = (_diboContext.OrdenDeProduccion
+                .Where(o => o.NumeroOrdenProduccion == entity.NumeroOrdenProduccion)
+                .Sum(o => o.TotalCalculado) + entity.TotalCalculado);
+
+            int? sumaExcedentes = _diboContext.OrdenDeProduccion.Where(o => o.NumeroOrdenProduccion
+            == entity.NumeroOrdenProduccion).Sum(o => o.Excedente);
+
+            entity.Entregas = (byte)(_diboContext.OrdenDeProduccion.Where(o => o.NumeroOrdenProduccion 
+            == entity.NumeroOrdenProduccion).Select(p => p.Entregas).Max() + 1);
+
+            if (sumaDeIngresos > entity.MaximoAceptadoPorCliente)
             {
-                lineToUpdate.Excedente = sumResult - (int?)lineToUpdate.TotalEnSistema;
+                entity.Excedente = (sumaDeIngresos - entity.MaximoAceptadoPorCliente) - 
+                    (sumaExcedentes ?? 0 );
                 // If there is a necessity to send an e-mail por excedente, then use it here
             }
-            else
-            {
-                lineToUpdate.Excedente = 0;
-            }
-            lineToUpdate.TotalCalculado += (entity.TotalCalculado - lineToUpdate.Excedente);
-            return "Los valores han sido actualizados en el sistema de forma correcta, ha sido enviado un correo a los encargados" +
-                " de producto terminado";
+            Add(entity);
         }
         public void Save()
         {

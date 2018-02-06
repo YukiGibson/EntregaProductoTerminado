@@ -1,7 +1,85 @@
-﻿
+﻿@model EntregaProductoTerminado.ViewModels.HistorialProductoTerminadoViewModel
 @{
     ViewBag.Title = "historial";
 }
+                                                                                
 
-<h2>Historial de ingresos</h2>
+<!--Primero usar html semantics para dividir las partes que consisten la página-->
+<!--Luego agregar cada elemento de html necesario-->
+<section>
+    <!--Search section-->
+    <h2>Historial de ingresos</h2>
+    @using (Html.BeginForm("Historial", "ProductoTerminado", FormMethod.Get))
+    {
+    <div class="form-group">
+        <label for="historialInput">Buscar por</label>
+        @Html.TextBoxFor(model => model.historialInput, new { @class = "form-control", 
+        @placeholder = "OP o Cliente" })
+    </div>
+    <div class="form-inline">
+        @Html.DisplayNameFor(model => model.fechaInicio)
+        @Html.TextBoxFor(model => model.fechaInicio, new { Value = DateTime.Today.ToString("yyyy-MM-dd"),
+        @class = "form-control datepicker", @readonly = "readonly" })
+        @Html.DisplayNameFor(model => model.fechaFin)
+        @Html.TextBoxFor(model => model.fechaFin, new { Value = DateTime.Today.ToString("yyyy-MM-dd"),
+        @class = "form-control datepicker", @readonly = "readonly" })
+        <input class="btn btn-primary" type="submit" value="Buscar" />
+    </div>
+     
+    }
+</section>
+
+<section class="table-responsive">
+    <h4 >Resultado de la búsqueda</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>@Html.DisplayNameFor(model => model.OrdenDeProduccion.Entregas)</th>
+                    <th>@Html.DisplayNameFor(model => model.OrdenDeProduccion.NumeroOrdenProduccion)</th>
+                    <th>@Html.DisplayNameFor(model => model.OrdenDeProduccion.Cliente)</th>
+                    <th>@Html.DisplayNameFor(model => model.OrdenDeProduccion.Bultos)</th>
+                    <th>@Html.DisplayNameFor(model => model.OrdenDeProduccion.UnidadesPorBulto)</th>
+                    <th>@Html.DisplayNameFor(model => model.OrdenDeProduccion.Fraccion)</th>
+                    <th>@Html.DisplayNameFor(model => model.OrdenDeProduccion.TotalCalculado)</th>
+                    <th>@Html.DisplayNameFor(model => model.OrdenDeProduccion.TotalEnSistema)</th>
+                    <th>@Html.DisplayNameFor(model => model.OrdenDeProduccion.PorcentajeTolerancia)</th>
+                    <th>@Html.DisplayNameFor(model => model.OrdenDeProduccion.FechaIngreso)</th>
+                    <th>@Html.DisplayNameFor(model => model.OrdenDeProduccion.Excedente)</th>
+                    <th>@Html.DisplayNameFor(model => model.OrdenDeProduccion.MaximoAceptadoPorCliente)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null)
+                {
+                    if (Model.OPHistorial != null)
+                    {
+                        for (int i = 0; i < Model.OPHistorial.Count; i++)
+                        {
+                            <tr class="row-highlight">
+                                <td scope="row">@(i + 1)</td>
+                                <td>@Html.DisplayFor(model => model.OPHistorial[i].Entregas)</td>
+                                <td>@Html.DisplayFor(model => model.OPHistorial[i].NumeroOrdenProduccion)</td>
+                                <td>@Html.DisplayFor(model => model.OPHistorial[i].Cliente)</td>
+                                <td>@Html.DisplayFor(model => model.OPHistorial[i].Bultos)</td>
+                                <td>@Html.DisplayFor(model => model.OPHistorial[i].UnidadesPorBulto)</td>
+                                <td>@Html.DisplayFor(model => model.OPHistorial[i].Fraccion)</td>
+                                <td>@Html.DisplayFor(model => model.OPHistorial[i].TotalCalculado)</td>
+                                <td>@Html.DisplayFor(model => model.OPHistorial[i].TotalEnSistema)</td>
+                                <td>@Html.DisplayFor(model => model.OPHistorial[i].PorcentajeTolerancia)%</td>
+                                <td>@Html.DisplayFor(model => model.OPHistorial[i].FechaIngreso)</td>
+                                <td>@Html.DisplayFor(model => model.OPHistorial[i].Excedente)</td>
+                                <td>@Html.DisplayFor(model => model.OPHistorial[i].MaximoAceptadoPorCliente)</td>
+                            </tr>
+                        }
+                    }
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td id="list-end" colspan="13">Fin de la lista</td>
+                </tr>
+            </tfoot>
+        </table>
+</section>
 
